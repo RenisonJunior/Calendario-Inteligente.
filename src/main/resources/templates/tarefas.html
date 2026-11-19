@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarefas | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container">
+    <div class="topo-pagina"><div><h1>Tarefas</h1><p>Cadastre, edite e conclua suas atividades.</p></div>
+      <a class="botao" th:href="@{/tarefas/nova}">Adicionar tarefa</a></div>
+    <div class="tabela-rolagem"><table class="tabela">
+      <thead><tr><th>Título</th><th>Categoria</th><th>Data</th><th>Previsão</th><th>Situação</th><th>Operações</th></tr></thead>
+      <tbody>
+        <tr th:each="tarefa : ${tarefas}">
+          <td><a th:href="@{/tarefas/{id}(id=${tarefa.id})}" th:text="${tarefa.titulo}">Tarefa</a></td>
+          <td th:text="${tarefa.categoria.nome}">Estudos</td>
+          <td th:text="${#temporals.format(tarefa.prazo, 'dd/MM/yyyy')}">19/11/2026</td>
+          <td th:text="${tarefa.minutosEstimados} + ' min'">30 min</td>
+          <td th:text="${tarefa.concluida ? 'Concluída' : 'Pendente'}">Pendente</td>
+          <td class="operacoes">
+            <a th:href="@{/tarefas/{id}/editar(id=${tarefa.id})}">Editar</a>
+            <form th:action="@{/tarefas/{id}/alternar(id=${tarefa.id})}" method="post"><button class="link-botao" type="submit" th:text="${tarefa.concluida ? 'Reabrir' : 'Concluir'}">Concluir</button></form>
+            <form th:action="@{/tarefas/{id}/excluir(id=${tarefa.id})}" method="post" onsubmit="return confirm('Excluir esta tarefa e suas subtarefas?')"><button class="link-botao perigoso" type="submit">Excluir</button></form>
+          </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(tarefas)}"><td colspan="6" class="vazio">Nenhuma tarefa cadastrada.</td></tr>
+      </tbody>
+    </table></div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calendário | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container">
+    <div class="topo-pagina"><div><h1>Calendário</h1><p>Veja suas tarefas organizadas por data.</p></div>
+      <a class="botao" th:href="@{/tarefas/nova}">Nova tarefa</a></div>
+    <div class="navega-mes">
+      <a th:href="@{/calendario(ano=${anterior.year},mes=${anterior.monthValue})}">Mês anterior</a>
+      <h2 th:text="${#strings.capitalize(mesTitulo)}">Novembro de 2026</h2>
+      <a th:href="@{/calendario(ano=${proximo.year},mes=${proximo.monthValue})}">Próximo mês</a>
+    </div>
+    <!-- Calendário montado no Java e exibido como uma tabela HTML simples. -->
+    <div class="tabela-rolagem"><table class="tabela tabela-calendario">
+      <thead><tr><th>Segunda</th><th>Terça</th><th>Quarta</th><th>Quinta</th><th>Sexta</th><th>Sábado</th><th>Domingo</th></tr></thead>
+      <tbody><tr th:each="semana : ${semanas}">
+        <td th:each="dia : ${semana}" th:classappend="${dia.noMes ? (dia.hoje ? ' dia-hoje' : '') : ' fora-mes'}">
+          <span class="numero-dia" th:text="${dia.data.dayOfMonth}">19</span>
+          <ul class="tarefas-dia">
+            <li th:each="tarefa : ${dia.tarefas}">
+              <a th:classappend="${tarefa.concluida ? ' riscado' : ''}" th:href="@{/tarefas/{id}(id=${tarefa.id})}" th:text="${tarefa.titulo}" th:title="${tarefa.titulo}">Estudar</a>
+            </li>
+          </ul>
+        </td>
+      </tr></tbody>
+    </table></div>
+  </main>
+</body>
+</html>

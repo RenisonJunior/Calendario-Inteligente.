@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container">
+    <div class="topo-pagina"><div><h1>Painel da rotina</h1><p>Organização automática pelo prazo e pelo tempo disponível.</p></div>
+      <a class="botao" th:href="@{/tarefas/nova}">Nova tarefa</a></div>
+    <p class="texto-apoio">Tempo diário configurado: <strong th:text="${minutosDisponiveis} + ' min'">120 min</strong>. A coluna "Sugestão" é preenchida automaticamente.</p>
+    <!-- O painel é somente uma tabela tradicional, conforme solicitado. -->
+    <div class="tabela-rolagem">
+      <table class="tabela">
+        <thead><tr><th>Prazo</th><th>Tarefa</th><th>Categoria</th><th>Tempo</th><th>Prioridade</th><th>Sugestão</th><th>Status</th><th>Ação</th></tr></thead>
+        <tbody>
+          <tr th:each="linha : ${linhas}">
+            <td th:text="${#temporals.format(linha.tarefa.prazo, 'dd/MM/yyyy')}">19/11/2026</td>
+            <td><a th:href="@{/tarefas/{id}(id=${linha.tarefa.id})}" th:text="${linha.tarefa.titulo}">Estudar</a></td>
+            <td th:text="${linha.tarefa.categoria.nome}">Estudos</td>
+            <td th:text="${linha.tarefa.minutosEstimados} + ' min'">30 min</td>
+            <td th:text="${linha.prioridade}">Hoje</td>
+            <td th:text="${linha.sugestao}">Fazer hoje</td>
+            <td th:text="${linha.tarefa.concluida ? 'Concluída' : 'Pendente'}">Pendente</td>
+            <td><a th:href="@{/tarefas/{id}(id=${linha.tarefa.id})}">Abrir</a></td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(linhas)}"><td colspan="8" class="vazio">Nenhuma tarefa cadastrada. <a th:href="@{/tarefas/nova}">Crie a primeira.</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>

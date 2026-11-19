@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Categorias | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container largura-formulario">
+    <h1>Categorias</h1><p>Separe suas tarefas por assunto.</p>
+    <p th:if="${erro}" th:text="${erro}" class="mensagem-erro"></p>
+    <div class="tabela-rolagem"><table class="tabela">
+      <thead><tr><th>Nome</th><th>Ação</th></tr></thead>
+      <tbody><tr th:each="categoria : ${categorias}">
+        <td th:text="${categoria.nome}">Estudos</td>
+        <td><form method="post" th:action="@{/categorias/{id}/excluir(id=${categoria.id})}" onsubmit="return confirm('Excluir esta categoria?')"><button class="link-botao perigoso" type="submit">Excluir</button></form></td>
+      </tr></tbody>
+    </table></div>
+    <h2 class="subtitulo-form">Nova categoria</h2>
+    <form th:action="@{/categorias}" method="post" class="formulario-linha">
+      <label for="nome" class="sr-only">Nome da categoria</label>
+      <input id="nome" type="text" name="nome" maxlength="60" required placeholder="Ex.: Saúde">
+      <button class="botao" type="submit">Adicionar</button>
+    </form>
+  </main>
+</body>
+</html>

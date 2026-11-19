@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfil | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container largura-formulario">
+    <h1>Perfil</h1>
+    <p>Defina quantos minutos você tem por dia para suas tarefas. O painel usa esse valor para sugerir um plano.</p>
+    <p th:if="${erro}" th:text="${erro}" class="mensagem-erro"></p>
+    <p th:if="${ok}" th:text="${ok}" class="mensagem-ok"></p>
+    <form method="post" th:action="@{/perfil}" class="formulario">
+      <label for="nome">Nome</label>
+      <input id="nome" type="text" name="nome" required maxlength="80" th:value="${perfil.nome}">
+      <label for="minutosDisponiveis">Minutos disponíveis por dia</label>
+      <input id="minutosDisponiveis" type="number" name="minutosDisponiveis" min="1" max="1440" th:value="${perfil.minutosDisponiveis}" required>
+      <div class="acoes-formulario"><button class="botao" type="submit">Salvar perfil</button><a th:href="@{/painel}">Ir para o painel</a></div>
+    </form>
+  </main>
+</body>
+</html>

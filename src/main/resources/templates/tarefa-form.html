@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro de tarefa | Prioriza</title><link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+  <nav th:replace="~{fragmentos :: menu}"></nav>
+  <main class="container largura-formulario">
+    <h1 th:text="${tarefa.id == null ? 'Nova tarefa' : 'Editar tarefa'}">Nova tarefa</h1>
+    <p>Preencha somente o necessário. A prioridade será calculada pelo prazo.</p>
+    <p th:if="${erro}" class="mensagem-erro" th:text="${erro}"></p>
+    <form method="post" th:action="@{/tarefas/salvar}" class="formulario">
+      <input type="hidden" name="id" th:if="${tarefa.id != null}" th:value="${tarefa.id}">
+      <label for="titulo">Título</label>
+      <input id="titulo" type="text" name="titulo" th:value="${tarefa.titulo}" maxlength="120" required placeholder="Ex.: Estudar Banco de Dados">
+      <label for="descricao">Descrição (opcional)</label>
+      <textarea id="descricao" name="descricao" maxlength="800" rows="4" placeholder="Observações sobre a tarefa" th:text="${tarefa.descricao}"></textarea>
+      <label for="prazo">Data da tarefa</label>
+      <input id="prazo" type="date" name="prazo" th:value="${tarefa.prazo != null ? tarefa.prazo : hoje}" required>
+      <label for="categoriaId">Categoria</label>
+      <select id="categoriaId" name="categoriaId" required>
+        <option value="">Selecione</option>
+        <option th:each="categoria : ${categorias}" th:value="${categoria.id}" th:text="${categoria.nome}" th:selected="${tarefa.categoria != null and categoria.id == tarefa.categoria.id}"></option>
+      </select>
+      <label for="minutosEstimados">Tempo previsto (minutos)</label>
+      <input id="minutosEstimados" name="minutosEstimados" type="number" min="1" max="1440" th:value="${tarefa.minutosEstimados}" required>
+      <div class="acoes-formulario"><button class="botao" type="submit">Salvar tarefa</button><a th:href="@{/tarefas}">Cancelar</a></div>
+    </form>
+  </main>
+</body>
+</html>
